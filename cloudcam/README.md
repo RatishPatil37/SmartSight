@@ -1,7 +1,5 @@
-
-# 📷 RPi Cloud Cam Uploader
-
-A lightweight Flask web interface for the Raspberry Pi that captures photos or videos and automatically uploads them to Microsoft OneDrive.
+# 📸 RPi Cloud Cam Uploader
+A lightweight Flask web interface for the Raspberry Pi that captures photos or videos and automatically uploads them to Microsoft OneDrive (or any cloud storage) using **Rclone**.
 
 ![Python](https://img.shields.io/badge/Python-3.x-blue?style=for-the-badge&logo=python&logoColor=white)
 ![Platform](https://img.shields.io/badge/Raspberry%20Pi-A22846?style=for-the-badge&logo=Raspberry%20Pi&logoColor=white)
@@ -10,95 +8,157 @@ A lightweight Flask web interface for the Raspberry Pi that captures photos or v
 ## 🚀 Features
 
 * **Web Interface:** Simple control via any browser on the local network.
-* **Auto-Upload:** Captured media is instantly synced to your specified OneDrive folder.
-* **Photo & Video Support:** Toggle between capturing high-res images or recording short video clips.
-* **Lightweight:** Minimal resource usage, perfect for Raspberry Pi Zero W or Pi 3/4.
-* **Mobile Friendly:** Responsive design allows you to trigger the camera from your phone.
+* **Instant Photo Mode:** Captures high-res images using `rpicam-still`.
+* **Video Mode:** Records 5-second clips, automatically converts them to MP4 (Android/iOS compatible), and uploads them.
+* **Auto-Cleanup:** Deletes local files immediately after a successful upload to save SD card space.
+* **Cloud Sync:** Uses `rclone` for reliable, secure uploads to OneDrive.
 
-## 🛠️ Hardware Requirements
+---
 
-* Raspberry Pi (Zero W, 3B+, 4, or 5)
-* Raspberry Pi Camera Module (v2, HQ, or compatible USB webcam)
-* Micro SD Card (16GB+ recommended)
-* Power Supply
+## 🛠️ System Architecture
 
-## 📦 Installation
+Here is how the data flows from your browser to the cloud:
 
-1. **Clone the Repository**
-   ```bash
-   git clone [https://github.com/yourusername/rpi-cloud-cam-uploader.git](https://github.com/yourusername/rpi-cloud-cam-uploader.git)
-   cd rpi-cloud-cam-uploader
-
-```
-
-2. **Install Dependencies**
-Make sure you have Python 3 installed, then run:
-```bash
-pip3 install -r requirements.txt
-
-```
-
-
-3. **Enable the Camera**
-Run `sudo raspi-config`, navigate to **Interface Options**, and enable the **Camera**. Reboot the Pi.
-
-## ⚙️ Configuration
-
-1. **OneDrive Setup**
-* Register a new app in the [Microsoft Azure Portal](https://www.google.com/search?q=https://portal.azure.com/).
-* Obtain your `CLIENT_ID` and `CLIENT_SECRET`.
-* Rename `config.example.json` to `config.json` and paste your credentials:
-```json
-{
-  "client_id": "YOUR_CLIENT_ID",
-  "client_secret": "YOUR_CLIENT_SECRET",
-  "redirect_uri": "http://localhost:5000/callback",
-  "upload_folder": "RPi_Cam_Uploads"
-}
+```mermaid
+graph TD
+    User["User (Mobile/PC)"] -->|HTTP POST| Flask["Flask Web Server"]
+    
+    subgraph Raspberry Pi
+        Flask -->|Trigger| Cam{"Camera Module"}
+        Cam -->|Capture Photo| JPG["IMG.jpg"]
+        Cam -->|Capture Video| RAW["raw.h264"]
+        
+        RAW -->|FFmpeg| MP4["VID.mp4"]
+        
+        JPG -->|Rclone| CloudProcess["Cloud Upload"]
+        MP4 -->|Rclone| CloudProcess
+    end
+    
+    CloudProcess -->|Upload| OneDrive(("OneDrive"))
+    CloudProcess -->|Success| Cleanup["Delete Local Files"]
+    Cleanup -->|Response| Flask
+    Flask -->|JSON| User
 
 ```
 
+---
 
+## 📋 Prerequisites
 
+Before running the Python code, you must install the necessary system tools on your Raspberry Pi.
 
-2. **Authentication**
-On the first run, you will need to authenticate via the browser to generate the access token.
+### 1. Install System Dependencies
 
-## 🏃 Usage
-
-Start the Flask server:
+Open your terminal and run:
 
 ```bash
-python3 app.py
+sudo apt update
+sudo apt install ffmpeg rclone
 
 ```
 
-Open your browser and navigate to:
-`http://<your-raspberry-pi-ip>:5000`
+### 2. Configure Rclone
 
-Click **Capture Photo** or **Record Video** to snap media and send it straight to the cloud.
+You need to connect Rclone to your OneDrive account.
 
-## 📂 Project Structure
-
-```
-rpi-cloud-cam-uploader/
-├── static/             # CSS and JS files
-├── templates/          # HTML templates for the web interface
-├── app.py              # Main Flask application logic
-├── camera.py           # Camera interface script
-├── onedrive_uploader.py # Logic for handling Microsoft Graph API
-├── requirements.txt    # Python dependencies
-└── config.json         # Configuration file (Git ignored)
+1. Run the config wizard:
+```bash
+rclone config
 
 ```
 
-## 🤝 Contributing
 
-Contributions are welcome! Please fork the repository and submit a pull request for any enhancements.
+2. Create a new remote named **`cloud_sight`** (matches the code configuration).
+3. Select `onedrive` from the list.
+4. Follow the on-screen instructions to authorize via your browser.
 
-## 📄 License
+### 3. Verify Camera
 
-This project is licensed under the MIT License - see the [LICENSE](https://www.google.com/search?q=LICENSE) file for details.
+Ensure your Raspberry Pi camera is enabled and working with the modern libcamera stack:
+
+```bash
+rpicam-hello
+
+```
+
+---
+
+## ⚙️ Installation & Setup
+
+1. **Clone or Download this repository** to your Raspberry Pi.
+2. **Install Python Requirements:**
+```bash
+pip install -r requirements.txt
+
+```
+
+
+*Note: If you see a `numpy` error, run: `pip install "numpy<2.0"`*
+
+3. **Project Structure:**
+Ensure your folder looks like this:
+```
+/project-folder
+├── app.py                # The main Flask application
+├── requirements.txt      # Python dependencies
+└── templates/
+    └── index.html        # Your HTML frontend
+
+```
+
+
+
+---
+
+## ▶️ Usage
+
+1. **Start the Server:**
+```bash
+python app.py
+
+```
+
+
+*You should see output indicating the server is running on port 5000.*
+2. **Access the Interface:**
+* Find your Pi's IP address: `hostname -I`
+* Open a browser on your phone/laptop and go to: `http://<YOUR_PI_IP>:5000`
+
+
+3. **Capture:**
+* Click **Capture Photo** or **Record Video**.
+* Watch the terminal for status updates (`[*] Uploading...`).
+* Check your OneDrive folder (`Apps/rclone/rpi cam` or similar) to see the files appear!
+
+
+
+---
+
+## 🔧 Configuration
+
+If you want to change the cloud destination, edit the top of `app.py`:
+
+```python
+# Name of your Rclone remote (set during 'rclone config')
+RCLONE_REMOTE = "cloud_sight" 
+
+# Folder path inside your OneDrive
+CLOUD_FOLDER = "rpi cam" 
+
+```
+
+## 🐛 Troubleshooting
+
+| Issue | Solution |
+| --- | --- |
+| **"Camera/Upload Failed"** | Check if another app is using the camera. Run `rpicam-hello` to test. |
+| **"Video Failed"** | Ensure `ffmpeg` is installed (`sudo apt install ffmpeg`). |
+| **Rclone Error** | Run `rclone listremotes` to check if your remote name matches `cloud_sight`. |
+| **Numpy Error** | Run `pip install "numpy<2.0"` to fix version conflicts. |
+
+---
+
+Made with ❤️ and 🐍 Python
 
 ```
 
