@@ -1,16 +1,8 @@
-Here is a complete, professional **README.md** and the necessary **requirements.txt** for your project.
+Here is the corrected, clean version of the **README.md** file. You can copy the code block below and save it exactly as `README.md` in your GitHub repository.
 
-### 📄 `requirements.txt`
+I have formatted it so that GitHub will render the badges, the architectural diagram, and the code blocks perfectly.
 
-Since your code relies heavily on system commands (subprocess), the Python requirements are very light.
-
-```text
-Flask==3.0.0
-
-```
-
----
-
+```markdown
 # 📸 RPi Cloud Cam Uploader
 
 A lightweight Flask web interface for the Raspberry Pi that captures photos or videos and automatically uploads them to Microsoft OneDrive (or any cloud storage) using **Rclone**.
@@ -100,14 +92,22 @@ rpicam-hello
 ## ⚙️ Installation & Setup
 
 1. **Clone or Download this repository** to your Raspberry Pi.
-2. **Install Python Requirements:**
+2. **Create Requirements File:**
+Create a file named `requirements.txt` in the folder and add the following line:
+```text
+Flask==3.0.0
+
+```
+
+
+3. **Install Python Requirements:**
 ```bash
 pip install -r requirements.txt
 
 ```
 
 
-3. **Project Structure:**
+4. **Project Structure:**
 Ensure your folder looks like this:
 ```
 /project-folder
@@ -129,16 +129,20 @@ Ensure your folder looks like this:
 python app.py
 
 ```
+
+
 *You should see output indicating the server is running on port 5000.*
 2. **Access the Interface:**
 * Find your Pi's IP address: `hostname -I`
-* Open a browser on your phone/laptop and go to:
-`http://<YOUR_PI_IP>:5000`
+* Open a browser on your phone/laptop and go to: `http://<YOUR_PI_IP>:5000`
+
 
 3. **Capture:**
 * Click **Capture Photo** or **Record Video**.
 * Watch the terminal for status updates (`[*] Uploading...`).
 * Check your OneDrive folder (`Apps/rclone/rpi cam` or similar) to see the files appear!
+
+
 
 ---
 
@@ -164,6 +168,8 @@ CLOUD_FOLDER = "rpi cam"
 | **Rclone Error** | Run `rclone listremotes` to check if your remote name matches `cloud_sight`. |
 
 ---
+
+Made with ❤️ and 🐍 Python
 
 ```
 
