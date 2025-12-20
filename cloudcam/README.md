@@ -1,17 +1,27 @@
-Here is the corrected **README.md** file.
+You are encountering two distinct issues based on the screenshots you uploaded. One is a **Python runtime error** (the NumPy issue), and the other is a **Markdown display error** (the Mermaid diagram).
 
-I have updated the badge URLs to use the standard, high-reliability versions (from **Shields.io**) to ensure the images load correctly on GitHub. I have also ensured the `requirements.txt` is clear.
+Here are the fixes for both.
 
-### 📄 requirements.txt
+### 1. Fix the Python Error (Screenshot 1)
 
-Save this code in a file named `requirements.txt`.
+The error `ValueError: numpy.dtype size changed` happens because your Raspberry Pi installed the newest version of NumPy (2.0), but the camera library expects an older version.
 
-```text
-Flask==3.0.0
+Run this command in your terminal to fix it:
+
+```bash
+pip install "numpy<2.0"
 
 ```
 
+---
 
+### 2. Fix the README Mermaid Error (Screenshot 2)
+
+The Mermaid diagram is failing because of the parentheses `()` and spaces inside the labels. GitHub's parser prefers quotes around labels with special characters.
+
+Below is the **fully corrected README.md**. I have updated the diagram syntax to be bulletproof (using quotes `""` and pipe `||` syntax). You can copy this directly to GitHub.
+
+```markdown
 # 📸 RPi Cloud Cam Uploader
 
 A lightweight Flask web interface for the Raspberry Pi that captures photos or videos and automatically uploads them to Microsoft OneDrive (or any cloud storage) using **Rclone**.
@@ -28,6 +38,7 @@ A lightweight Flask web interface for the Raspberry Pi that captures photos or v
 * **Auto-Cleanup:** Deletes local files immediately after a successful upload to save SD card space.
 * **Cloud Sync:** Uses `rclone` for reliable, secure uploads to OneDrive.
 
+---
 
 ## 🛠️ System Architecture
 
@@ -35,23 +46,23 @@ Here is how the data flows from your browser to the cloud:
 
 ```mermaid
 graph TD
-    User[User (Mobile/PC)] -- HTTP POST --> Flask[Flask Web Server]
+    User["User (Mobile/PC)"] -->|HTTP POST| Flask["Flask Web Server"]
     
     subgraph Raspberry Pi
-        Flask -- Trigger --> Cam{Camera Module}
-        Cam -- Capture Photo --> JPG[IMG.jpg]
-        Cam -- Capture Video --> RAW[raw.h264]
+        Flask -->|Trigger| Cam{"Camera Module"}
+        Cam -->|Capture Photo| JPG["IMG.jpg"]
+        Cam -->|Capture Video| RAW["raw.h264"]
         
-        RAW -- FFmpeg --> MP4[VID.mp4]
+        RAW -->|FFmpeg| MP4["VID.mp4"]
         
-        JPG -- Rclone --> CloudProcess[Cloud Upload]
-        MP4 -- Rclone --> CloudProcess
+        JPG -->|Rclone| CloudProcess["Cloud Upload"]
+        MP4 -->|Rclone| CloudProcess
     end
     
-    CloudProcess -- Upload --> OneDrive((OneDrive))
-    CloudProcess -- Success --> Cleanup[Delete Local Files]
-    Cleanup -- Response --> Flask
-    Flask -- JSON --> User
+    CloudProcess -->|Upload| OneDrive(("OneDrive"))
+    CloudProcess -->|Success| Cleanup["Delete Local Files"]
+    Cleanup -->|Response| Flask
+    Flask -->|JSON| User
 
 ```
 
@@ -107,6 +118,7 @@ pip install -r requirements.txt
 ```
 
 
+*Note: If you see a `numpy` error, run: `pip install "numpy<2.0"*`
 3. **Project Structure:**
 Ensure your folder looks like this:
 ```
@@ -166,6 +178,7 @@ CLOUD_FOLDER = "rpi cam"
 | **"Camera/Upload Failed"** | Check if another app is using the camera. Run `rpicam-hello` to test. |
 | **"Video Failed"** | Ensure `ffmpeg` is installed (`sudo apt install ffmpeg`). |
 | **Rclone Error** | Run `rclone listremotes` to check if your remote name matches `cloud_sight`. |
+| **Numpy Error** | Run `pip install "numpy<2.0"` to fix version conflicts. |
 
 ---
 
