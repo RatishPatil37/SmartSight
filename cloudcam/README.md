@@ -11,11 +11,6 @@ Flask==3.0.0
 
 ---
 
-### 📝 `README.md`
-
-You can copy and paste the code below directly into your project's `README.md` file.
-
-```markdown
 # 📸 RPi Cloud Cam Uploader
 
 A lightweight Flask web interface for the Raspberry Pi that captures photos or videos and automatically uploads them to Microsoft OneDrive (or any cloud storage) using **Rclone**.
@@ -134,21 +129,16 @@ Ensure your folder looks like this:
 python app.py
 
 ```
-
-
 *You should see output indicating the server is running on port 5000.*
 2. **Access the Interface:**
 * Find your Pi's IP address: `hostname -I`
 * Open a browser on your phone/laptop and go to:
 `http://<YOUR_PI_IP>:5000`
 
-
 3. **Capture:**
 * Click **Capture Photo** or **Record Video**.
 * Watch the terminal for status updates (`[*] Uploading...`).
 * Check your OneDrive folder (`Apps/rclone/rpi cam` or similar) to see the files appear!
-
-
 
 ---
 
@@ -174,8 +164,6 @@ CLOUD_FOLDER = "rpi cam"
 | **Rclone Error** | Run `rclone listremotes` to check if your remote name matches `cloud_sight`. |
 
 ---
-
-Made with ❤️ and 🐍 Python
 
 ```
 
