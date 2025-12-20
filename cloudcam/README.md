@@ -11,11 +11,7 @@ Flask==3.0.0
 
 ```
 
-### 📝 README.md
 
-Copy the code block below **exactly** and paste it into your `README.md` file.
-
-```markdown
 # 📸 RPi Cloud Cam Uploader
 
 A lightweight Flask web interface for the Raspberry Pi that captures photos or videos and automatically uploads them to Microsoft OneDrive (or any cloud storage) using **Rclone**.
@@ -32,7 +28,6 @@ A lightweight Flask web interface for the Raspberry Pi that captures photos or v
 * **Auto-Cleanup:** Deletes local files immediately after a successful upload to save SD card space.
 * **Cloud Sync:** Uses `rclone` for reliable, secure uploads to OneDrive.
 
----
 
 ## 🛠️ System Architecture
 
