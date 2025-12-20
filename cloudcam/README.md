@@ -1,15 +1,28 @@
-Here is the corrected, clean version of the **README.md** file. You can copy the code block below and save it exactly as `README.md` in your GitHub repository.
+Here is the corrected **README.md** file.
 
-I have formatted it so that GitHub will render the badges, the architectural diagram, and the code blocks perfectly.
+I have updated the badge URLs to use the standard, high-reliability versions (from **Shields.io**) to ensure the images load correctly on GitHub. I have also ensured the `requirements.txt` is clear.
+
+### 📄 requirements.txt
+
+Save this code in a file named `requirements.txt`.
+
+```text
+Flask==3.0.0
+
+```
+
+### 📝 README.md
+
+Copy the code block below **exactly** and paste it into your `README.md` file.
 
 ```markdown
 # 📸 RPi Cloud Cam Uploader
 
 A lightweight Flask web interface for the Raspberry Pi that captures photos or videos and automatically uploads them to Microsoft OneDrive (or any cloud storage) using **Rclone**.
 
-![Python](https://img.shields.io/badge/Python-3.x-blue?style=flat-square&logo=python)
-![Platform](https://img.shields.io/badge/Platform-Raspberry%20Pi-red?style=flat-square&logo=raspberrypi)
-![Cloud](https://img.shields.io/badge/Cloud-OneDrive-0078D4?style=flat-square&logo=microsoftonedrive)
+![Python](https://img.shields.io/badge/Python-3.x-blue?style=for-the-badge&logo=python&logoColor=white)
+![Platform](https://img.shields.io/badge/Raspberry%20Pi-A22846?style=for-the-badge&logo=Raspberry%20Pi&logoColor=white)
+![Cloud](https://img.shields.io/badge/OneDrive-0078D4?style=for-the-badge&logo=microsoft-onedrive&logoColor=white)
 
 ## 🚀 Features
 
@@ -92,22 +105,14 @@ rpicam-hello
 ## ⚙️ Installation & Setup
 
 1. **Clone or Download this repository** to your Raspberry Pi.
-2. **Create Requirements File:**
-Create a file named `requirements.txt` in the folder and add the following line:
-```text
-Flask==3.0.0
-
-```
-
-
-3. **Install Python Requirements:**
+2. **Install Python Requirements:**
 ```bash
 pip install -r requirements.txt
 
 ```
 
 
-4. **Project Structure:**
+3. **Project Structure:**
 Ensure your folder looks like this:
 ```
 /project-folder
