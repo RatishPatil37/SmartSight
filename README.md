@@ -1,5 +1,5 @@
 # SmartSight
-AI Navigation Smart Glasses for the Visually Impaired using Raspberry PI 4B
+Yolov8n based AI Navigation Smart Glasses for the Visually Impaired using Raspberry PI 4B 
 
 # 📸 RPi Cloud Cam Uploader
 A lightweight Flask web interface for the Raspberry Pi that captures photos or videos and automatically uploads them to Microsoft OneDrive (or any cloud storage) using **Rclone**.
