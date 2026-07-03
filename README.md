@@ -159,6 +159,16 @@ CLOUD_FOLDER = "rpi cam"
 | **Rclone Error** | Run `rclone listremotes` to check if your remote name matches `cloud_sight`. |
 | **Numpy Error** | Run `pip install "numpy<2.0"` to fix version conflicts. |
 
+
+## DEXTER GUIDE
+
+1. **dex.py:** This is a voice-only chatbot script. It continuously listens for speech using Voice Activity Detection (VAD), transcribes the audio using the faster_whisper model, generates a response using a local LLM via ollama (specifically the tinyllama model), and speaks the response back using Kokoro TTS.
+2. **dex_vision.py:** This is the more advanced version of the assistant that links the voice chatbot with the vision system. It listens for specific wake words ("hey dexter", etc.). When you ask it to start "object recognition", it launches the tts.py script. It also includes clever power-saving features: it instantly "freezes" the vision process while you are speaking to it so it doesn't max out the CPU.
+3. **dex_wake.py:** A stripped-down, power-optimized version of the voice assistant. It is explicitly designed to run on a low-power 5V 2.1A power bank. It limits CPU threads and only activates when it hears its wake word, making it efficient for portable use without the camera.
+4. **tts.py:** This is the "Smart Sight" vision module. It uses a camera to capture video, runs a YOLO object detection model (checking for a custom yolov5su_ncnn_model), and then uses text-to-speech (pyttsx3) to announce what it sees and where it is located (e.g., "I see a person at left, cup at center"). It also displays a video feed with bounding boxes and vertical guide lines.
+5. **test_mic.py:** A small utility script likely used just to verify that the microphone is working correctly.
+yolov5su_ncnn_model: A folder containing the specific neural network model used by the vision script to detect objects.
+
 ---
 
 Made with ❤️ and 🐍 Python
